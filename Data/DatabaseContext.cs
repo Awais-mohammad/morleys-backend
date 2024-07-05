@@ -28,7 +28,7 @@ namespace morleys_backend.Data
                 .HasForeignKey<Cart>(o => o.UserId);
 
             modelBuilder.Entity<OrderProduct>()
-            .HasKey(op => op.Id); // Composite primary key
+            .HasKey(op => op.Id); // primary key
 
             modelBuilder.Entity<OrderProduct>()
               .HasOne(op => op.Order)
