@@ -1,23 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using morleys_backend.Data;
 using morleys_backend.Models.DbModels;
+using morleys_backend.Models.Dto;
 
 namespace morleys_backend.Controllers
 {
-    public class UserDto
-    {
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; } // Consider using a separate class for secure password handling
-        public string Address { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Role { get; set; }
-    }
 
     [ApiController]
     [Route("api/signup")]
 
     public class SignUpController : ControllerBase
     {
+        private readonly DatabaseContext _context;
+        public SignUpController(DatabaseContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet]
         public ActionResult<string> Get()
         {
@@ -26,7 +26,7 @@ namespace morleys_backend.Controllers
 
 
         [HttpPost]
-        public ActionResult<string> Post(UserDto userDto)
+        public ActionResult<string> Post(AddUserDto userDto)
         {
             User user = new User
             {
@@ -38,6 +38,8 @@ namespace morleys_backend.Controllers
                 Role = userDto.Role,
                 CreatedAt = DateTime.UtcNow
             };
+            _context.Users.Add(user);
+            _context.SaveChanges();
             return Ok(user);
         }
     }
